@@ -2,29 +2,47 @@ import React from "react";
 import Input from "../components/input";
 import Button from "../components/Button";
 import OutlineButton from "../components/OutlineButton";
-import Login from "./login";
 import { Link } from "react-router";
+import {useUser} from "../context/UserContext"
+import {useState} from 'react'
 
 const SignUp = () => {
+const {addUser} = useUser()
+  const [newUser, setNewUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+  })
+  function handleChange(e) {
+    setNewUser({...newUser, [e.target.name]: e.target.value})
+  }
+  function handleAddUser(e) {
+    e.preventDefault()
+    addUser(newUser.email, newUser.password)
+  }
+   const {setCurrentUser} = useUser()
+  //  const password = "12Ab#c"
+  //  const email = "siam@gamil.com"
+   
   return (
     <section>
-      <div className="grid grid-cols-[4fr_3fr] gap-10 justify-between items-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[4fr_3fr] gap-5 xl:gap-10 justify-between items-center">
         <div>
           <img
-            className="w-full h-200"
+            className="w-full max-h-[780px] object-cover"
             src="signup-image.png"
             alt="signup-image"
           />
         </div>
-        <div className="px-[130px] py-20">
+        <div className="p-10 md:p-20 xl:px-[130px] xl:py-20">
           <form action="">
             <h2 className="text-[#000000] font-medium text-[36px] leading-[30px]">Create an account</h2>
             <p className="text-[#000000] text-4 leading-6 pt-6 pb-8">Enter your details below</p>
             <div className="grid grid-cols-1 gap-10">
-              <Input placeholder={"Input your name"} />
-              <Input placeholder={"Email or Phone Number"} />
-              <Input placeholder={"Password"} />
-              <Button TagName={"button"} type="submit">Create Account</Button>
+              <Input onChange={(e)=>handleChange(e)} value={newUser.name} name="name" placeholder={"Input your name"} />
+              <Input onChange={(e)=>handleChange(e)} placeholder={"Email or Phone Number"} name="email"/>
+              <Input onChange={(e)=>handleChange(e)} placeholder={"Password"} name="password"/>
+              <Button onClick={(e)=>handleAddUser(e)} TagName={"button"} type="submit">Create Account</Button>
               <OutlineButton TagName={"button"}>
                 <img src="google-icon.svg" alt="google icon" />
                 Sign up with Google
