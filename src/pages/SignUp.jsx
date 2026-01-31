@@ -1,30 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "../components/input";
 import Button from "../components/Button";
 import OutlineButton from "../components/OutlineButton";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {useUser} from "../context/UserContext"
 import {useState} from 'react'
+import { ToastContainer } from 'react-toastify';
 
 const SignUp = () => {
 const {addUser} = useUser()
+const navigate = useNavigate()
+const [loading, setLoading] = useState(false)
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
     password: "",
   })
+
   function handleChange(e) {
     setNewUser({...newUser, [e.target.name]: e.target.value})
   }
+
   function handleAddUser(e) {
     e.preventDefault()
     addUser(newUser.email, newUser.password)
+    setLoading(true)
+     setTimeout(()=>{
+      navigate("/login")
+         setLoading(false)
+    }, 4000)
   }
-   const {setCurrentUser} = useUser()
-  //  const password = "12Ab#c"
-  //  const email = "siam@gamil.com"
-   
+
   return (
+  <>
+  <ToastContainer />
     <section>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[4fr_3fr] gap-5 xl:gap-10 justify-between items-center">
         <div>
@@ -42,7 +51,7 @@ const {addUser} = useUser()
               <Input onChange={(e)=>handleChange(e)} value={newUser.name} name="name" placeholder={"Input your name"} />
               <Input onChange={(e)=>handleChange(e)} placeholder={"Email or Phone Number"} name="email"/>
               <Input onChange={(e)=>handleChange(e)} placeholder={"Password"} name="password"/>
-              <Button onClick={(e)=>handleAddUser(e)} TagName={"button"} type="submit">Create Account</Button>
+              <Button onClick={(e)=>handleAddUser(e)} TagName={"button"} type="submit">{loading ? "Creating..." : "Create account"}</Button>
               <OutlineButton TagName={"button"}>
                 <img src="google-icon.svg" alt="google icon" />
                 Sign up with Google
@@ -53,6 +62,7 @@ const {addUser} = useUser()
         </div>
       </div>
     </section>
+  </>
   );
 };
 
