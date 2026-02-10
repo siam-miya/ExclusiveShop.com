@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router'
+import { useUser } from '../context/userContext';
 
 const Navbar = () => {
+    const currentUser = useUser();
   return (
     <nav className='pt-9 pb-9 bg-white border-b border-b-gray-400'>
         <div className="container">
@@ -19,9 +21,11 @@ const Navbar = () => {
                    <li>
                      <Link to="/about">About</Link>
                    </li>
-                   <li>
+                  {!currentUser && (
+                     <li>
                      <Link to="/signup">Sign UP</Link>
                    </li>
+                  )}
                 </ul>
                 <div className='flex items-center justify-center gap-6'>
                     <form action="" className='grid grid-cols-[1fr_24px] gap-8 bg-[#F5F5F5] py-[7px] pl-5 pr-3 rounded-[4px]'>

@@ -3,7 +3,6 @@ import { Link } from 'react-router'
 import { useUser } from '../context/userContext'
 const Footer = () => {
  const {currentUser} = useUser()
- console.log(currentUser)
   return (
     <footer className='bg-black py-20'>
       <div className="container">

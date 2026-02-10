@@ -4,19 +4,25 @@ import Login from "./pages/login";
 import SignUp from "./pages/signUp";
 import MainLayout from "./layouts/MainLayout";
 import ErrorPage from "./pages/ErrorPage";
-const App = () => {
-  return (
-     <BrowserRouter>
-    <Routes>
-     <Route path="/" element={<MainLayout/>}>
-      <Route index={true} element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-     </Route>
-     <Route path="*" element={<ErrorPage/>}/>
-    </Routes>
-  </BrowserRouter>
-  )
-}
+import Protected from "./components/Protected";
+import { useUser } from "./context/userContext";
 
-export default App
+const App = () => {
+  const {currentUser} = useUser()
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route index={true} element={<Protected user={currentUser}>
+                <Home />
+              </Protected>}/>
+        </Route>
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default App;

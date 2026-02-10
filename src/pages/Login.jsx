@@ -7,6 +7,7 @@ import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 
 const Login = () => {
+  const {currentUser} = useUser();
   const { logIn } = useUser();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -14,26 +15,23 @@ const Login = () => {
     email: "",
     password: "",
   });
-
   function handleChange(e) {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
   }
-
-  function handleLogin(e) {
-    e.preventDefault()
-    console.log("login", newUser)
-    logIn(newUser.email, newUser.password)
-  //   addUser(newUser.email, newUser.password)
-  //   setLoading(true)
-  //    setTimeout(()=>{
-  //     navigate("/login")
-  //        setLoading(false)
-  //   }, 4000)
+  async function handleLogin(e) {
+    e.preventDefault();
+    await logIn(newUser.email, newUser.password);
+    try {
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   }
-
+  if (currentUser) {
+  return navigate("/");
+  }
   return (
     <section>
-      <ToastContainer/>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[4fr_3fr] gap-5 xl:gap-10 justify-between items-center">
         <div>
           <img
@@ -62,13 +60,18 @@ const Login = () => {
                 name="password"
               />
               <div className="grid grid-cols-2 gap-[20px]">
-                <Button onClick={(e)=>handleLogin(e)} TagName={"button"} type="submit">
+                <Button
+                  onClick={(e) => handleLogin(e)}
+                  TagName={"button"}
+                  type="submit"
+                >
                   Login
                 </Button>
                 <button className="text-[#DB4444] cursor-pointer" type="submit">
                   Forget Password?
                 </button>
               </div>
+              <p>Don't have an account? <Link to="/signup" className="text-[#DB4444]">Sign Up</Link></p>
             </div>
           </form>
         </div>
